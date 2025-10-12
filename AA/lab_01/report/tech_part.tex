@@ -1,0 +1,161 @@
+\chapter{Технологическая часть}
+
+В данном разделе будут перечислены средства реализации, листинги кода
+и функциональные тесты.
+
+\section{Средства реализации}
+
+В качестве языка программирования для выполнения данной лабораторной работы был выбран С++~\cite{book:cpp}, так как он является статически типизированным языком с гарантированным временем выполнения, что соотносится с требованиями к лабораторной работе.
+
+Для замера процессорного времени выполнения программы используется функция \textit{clock()} библиотеки \textit{ctime}~\cite{book:ctime_sync}~\cite{book:time_clock}
+
+\section{Сведения о модулях программы}
+
+Программа состоит из 6 модулей:
+
+\begin{enumerate}[label={\arabic*)}]
+	\item definitions.hpp --- модуль, содержащий определения типов данных;
+	\item err.hpp --- модуль, содержащий описание классов исключений;
+	\item extras.cpp --- модуль, содержащий функции инициализации объектов;
+	\item solution.cpp --- модуль, содержащий реализации всех алгоритмов;
+	\item io.cpp --- модуль, содержащий функции ввода-вывода;
+	\item main.cpp --- точка входа программы;
+\end{enumerate}
+
+\section{Реализация алгоритмов}
+
+В листинге~\ref{lst:defs} содержится описание используемых типов данных, в листингах~\ref{lst:std}~--~\ref{lst:WinOpt} приведены реализации алгоритмов умножения матриц
+
+\lstinputlisting[label=lst:defs,caption=Используемые типы данных]{listings/defs.txt}
+\clearpage
+
+\lstinputlisting[label=lst:std,caption=Реализация стандартного алгоритма умножения матриц]{listings/stdMult.txt}
+\clearpage
+
+\lstinputlisting[label=lst:Win,caption=Реализация алгоритма Винограда умножения матриц]{listings/Win.txt}
+\clearpage
+
+\lstinputlisting[label=lst:WinOpt,caption=Реализация оптимизированного алгоритма Винограда умножения матриц]{listings/WinOpt.txt}
+\clearpage
+
+\section{Функциональные тесты}
+
+Тестирование проведено по методологии чёрного ящика. 
+
+В ходе выполнения программы тестовые данные подаются на вход всем трём реализациям; совпадение результатов их работы проверяется внутри программы. Функциональные тесты приведены в таблице~\ref{tbl:func_tests}
+
+\begin{table}[ht]
+	\small
+	\begin{center}
+		\begin{threeparttable}
+			\caption{Функциональные тесты для реализаций алгоритмов умножения матриц}
+			\label{tbl:func_tests}
+			\begin{tabular}{|c|c|c|c|c|}
+				\hline
+				\multicolumn{2}{|c|}{\bfseries Входные данные}
+				& \multicolumn{2}{c|}{\bfseries Результат для классического алгоритма} \\
+				\hline 
+				\bfseries Матрица 1
+				& \bfseries Матрица 2
+				& \bfseries Ожидаемый результат
+				& \bfseries Фактический результат \\
+				\hline
+				$\begin{pmatrix}
+					1 & 5 & 7\\
+					2 & 6 & 8\\
+					3 & 7 & 9
+				\end{pmatrix}$ 
+				&  
+				$\begin{pmatrix}
+					&
+				\end{pmatrix}$
+				&
+				\text{Сообщение об ошибке}
+				&
+				\text{Сообщение об ошибке} \\ 
+				\hline
+				$\begin{pmatrix}
+					1 & 5 & 7\\
+				\end{pmatrix}$ 
+				&  
+				$\begin{pmatrix}
+					1 & 2 & 3\\
+				\end{pmatrix}$
+				&
+				\text{Сообщение об ошибке}
+				&
+				\text{Сообщение об ошибке} \\ 
+				\hline
+				$\begin{pmatrix}
+					1 & 2 & 3\\
+					4 & 5 & 6 \\
+					7 & 8 & 9 \\
+				\end{pmatrix}$ 
+				&  
+				$\begin{pmatrix}
+					1 & 0 & 0\\
+					0 & 1 & 0 \\
+					0 & 0 & 1 \\
+				\end{pmatrix}$
+				&
+				$\begin{pmatrix}
+					1 & 2 & 3\\
+					4 & 5 & 6 \\
+					7 & 8 & 9 \\
+				\end{pmatrix}$ 
+				&
+				$\begin{pmatrix}
+					1 & 2 & 3\\
+					4 & 5 & 6 \\
+					7 & 8 & 9 \\
+				\end{pmatrix}$ \\ 
+				\hline
+				$\begin{pmatrix}
+					1 & 2 & 3 \\
+					4 & 5 & 6
+				\end{pmatrix}$
+				&
+				$\begin{pmatrix}
+					1 \\
+					10 \\
+					100
+				\end{pmatrix}$
+				&
+				$\begin{pmatrix}
+					321 \\
+					654
+				\end{pmatrix}$ 
+				&
+				$\begin{pmatrix}
+					321 \\
+					654
+				\end{pmatrix}$ \\ 
+				\hline
+				$\begin{pmatrix}
+					10
+				\end{pmatrix}$
+				&
+				$\begin{pmatrix}
+					35
+				\end{pmatrix}$
+				&
+				$\begin{pmatrix}
+					350
+				\end{pmatrix}$ 
+				&
+				$\begin{pmatrix}
+					350
+				\end{pmatrix}$ \\ 
+				\hline
+			\end{tabular}
+		\end{threeparttable}
+	\end{center}
+\end{table}
+
+Все тесты пройдены успешно.
+
+\section*{Вывод}
+
+В данном разделе были перечислены использованные технические средства, приведены и протестированы реализации трёх алгоритмов умножения матриц. В результате тестирования корректность реализаций была подтверждена.
+
+\clearpage

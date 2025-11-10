@@ -1,0 +1,18 @@
+#!/bin/bash
+
+Ns=$(echo -e "1\n262001\n10000" | python3 gen.py) # start end step
+K=1000
+
+OUTPUT="results.csv"
+
+echo "n;rec;nonrec" > $OUTPUT
+
+for n in $Ns; do
+    INPUT_REC="REC\n$n\nk=$K"
+    INPUT_NONREC="NONREC\n$n\nk=$K"
+
+    RESULT_REC=$(echo -e "$INPUT_REC" | ../code/apps/outdir/app-cli-release | tail -n 1)
+    RESULT_NONREC=$(echo -e "$INPUT_NONREC" | ../code/apps/outdir/app-cli-release | tail -n 1)
+
+    echo "${n};${RESULT_REC};${RESULT_NONREC}" >> $OUTPUT
+done

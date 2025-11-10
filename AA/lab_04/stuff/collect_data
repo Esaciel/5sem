@@ -1,18 +1,24 @@
 #!/bin/bash
 
-Ns=$(echo -e "1\n262001\n10000" | python3 gen.py) # start end step
-K=1000
+graphsize=(100)
+threads_num=(0 1 2 4 8 16 32 64 128)
+input_string="example"
+max_gap=5
+program="../code/apps/outdir/app-cli-release"
+output_file="results.csv"
 
-OUTPUT="results.csv"
+echo -n "graphsize" > $output_file
+for p in "${threads_num[@]}"; do
+    echo -n ";par$p" >> $output_file
+done
+echo "" >> $output_file
 
-echo "n;rec;nonrec" > $OUTPUT
-
-for n in $Ns; do
-    INPUT_REC="REC\n$n\nk=$K"
-    INPUT_NONREC="NONREC\n$n\nk=$K"
-
-    RESULT_REC=$(echo -e "$INPUT_REC" | ../code/apps/outdir/app-cli-release | tail -n 1)
-    RESULT_NONREC=$(echo -e "$INPUT_NONREC" | ../code/apps/outdir/app-cli-release | tail -n 1)
-
-    echo "${n};${RESULT_REC};${RESULT_NONREC}" >> $OUTPUT
+for size in "${graphsize[@]}"; do
+    python3 gen.py "$size" > tmp.gv
+    echo -n "$size" >> $output_file
+    for thread in "${threads_num[@]}"; do
+        result=$($program "tmp.gv" "$max_gap" "$size" "$thread" "--measure")
+        echo -n ";$result" >> $output_file
+    done
+    echo "" >> $output_file
 done

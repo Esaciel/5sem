@@ -8,7 +8,8 @@ meson_install :
 	dpkg -l | grep -qw ninja-build || apt install ninja-build -y -qq
 
 build_apps : meson_install
-	cd code/apps && mv meson.txt meson.build && meson setup outdir
+	mv code/apps/meson.txt code/apps/meson.build 2>/dev/null || echo "" > /dev/null
+	cd code/apps && meson setup outdir
 	ninja -C code/apps/outdir
 
 ready/app-cli-release : ready build_apps
@@ -25,7 +26,8 @@ ready/app-tui-debug : ready  build_apps
 
 
 build_unit : meson_install
-	cd code/unit && mv meson.txt meson.build && meson setup outdir
+	mv code/unit/meson.txt code/unit/meson.build  2>/dev/null || echo "" > /dev/null
+	cd code/unit && meson setup outdir
 	ninja -C code/unit/outdir
 
 test_unit : build_unit

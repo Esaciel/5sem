@@ -4,7 +4,7 @@
 
 using namespace std;
 
-vector<Pair> floyd_warshall_sequential(const vector<vector<uint>> &adj, double max_distance)
+vector<Pair> find_pairs_within_range__sequential(const vector<vector<uint>> &adj, double max_distance)
 {
     size_t n = adj.size();
     double INF = numeric_limits<double>::max();
@@ -12,27 +12,42 @@ vector<Pair> floyd_warshall_sequential(const vector<vector<uint>> &adj, double m
 
     for (size_t i = 0; i < n; ++i)
     {
+        dist[i][i] = 0;
         for (size_t j = 0; j < n; ++j)
         {
-            if (i == j)
-                dist[i][j] = 0.;
-            else if (adj[i][j] > 0)
+            if (adj[i][j] > 0)
                 dist[i][j] = static_cast<double>(adj[i][j]);
         }
     }
 
     for (size_t k = 0; k < n; ++k)
+    {
         for (size_t i = 0; i < n; ++i)
+        {
+            if (dist[i][k] == INF)
+                continue;
             for (size_t j = 0; j < n; ++j)
-                if (dist[i][k] + dist[k][j] < dist[i][j])
-                    dist[i][j] = dist[i][k] + dist[k][j];
+            {
+                if (dist[k][j] == INF)
+                    continue;
+                double new_dist = dist[i][k] + dist[k][j];
+                if (new_dist < dist[i][j])
+                {
+                    dist[i][j] = new_dist;
+                }
+            }
+        }
+    }
 
     vector<Pair> pairs;
     for (size_t i = 0; i < n; ++i)
+    {
         for (size_t j = 0; j < n; ++j)
+        {
             if (i != j && dist[i][j] <= max_distance)
                 pairs.emplace_back(i, j);
-
+        }
+    }
     return pairs;
 }
 
@@ -56,7 +71,7 @@ void floyd_warshall_worker(size_t start, size_t end, size_t k, size_t n, vector<
     }
 }
 
-vector<Pair> floyd_warshall_parallel(vector<vector<uint>> &adj, double max_dist, size_t thread_count)
+vector<Pair> find_pairs_within_range__parallel(vector<vector<uint>> &adj, double max_dist, size_t thread_count)
 {
     size_t n = adj.size();
     const double INF = numeric_limits<double>::max();

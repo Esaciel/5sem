@@ -1,11 +1,13 @@
 #!/bin/bash
 
-graphsize=(100)
-threads_num=(0 1 2 4 8 16 32 64 128)
-input_string="example"
+#graphsize=(10 50 100 500 1000 2000)
+#threads_num=(0 1 2 4 8 16 32 64 128)
+graphsize=(2000)
+threads_num=(128)
 max_gap=5
 program="../code/apps/outdir/app-cli-release"
 output_file="results.csv"
+itercount=10
 
 echo -n "graphsize" > $output_file
 for p in "${threads_num[@]}"; do
@@ -14,10 +16,9 @@ done
 echo "" >> $output_file
 
 for size in "${graphsize[@]}"; do
-    python3 gen.py "$size" > tmp.gv
     echo -n "$size" >> $output_file
     for thread in "${threads_num[@]}"; do
-        result=$($program "tmp.gv" "$max_gap" "$size" "$thread" "--measure")
+        result=$($program "$size.gv" "$max_gap" "$thread" "$itercount")
         echo -n ";$result" >> $output_file
     done
     echo "" >> $output_file

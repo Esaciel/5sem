@@ -8,12 +8,12 @@ gtest_main_dep = dependency('gtest_main', required: true)
 source = [
   '../src/unit.cpp',
   '../src/Solution/solution.cpp',
-  '../src/Measurements/measurements.cpp',
   '../src/Utils/utils.cpp',
-  '../src/Solution/threadpool.cpp'
+  '../src/Solution/threadpool.cpp',
+  '../src/IO/io.cpp'
 ]
 
-incdirs = include_directories('../src', '../src/Solution', '../src/Measurements', '../src/Utils')
+incdirs = include_directories('../src', '../src/Solution', '../src/Utils', '../src/IO')
 
 unit_tests = executable('unit_tests',
   sources: source,

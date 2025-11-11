@@ -1,0 +1,7 @@
+digraph G {
+    B->A [label=2];
+    A->C [label=9];
+    C->B [label=9];
+    A->B [label=5];
+    C->A [label=5];
+}

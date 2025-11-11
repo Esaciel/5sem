@@ -1,53 +1,52 @@
 import random
 import sys
 
-def generate_weakly_connected_digraph(N, extra_edges_ratio=0.3):
+def generate_weakly_connected_digraph(N, P=0):
     """
     Генерирует слабо-связанный ориентированный граф с N вершинами.
-    
-    extra_edges_ratio - доля дополнительных ребер относительно минимального числа ребер (N-1)
-    для усложнения графа.
+    P - коэффициент разреженности [0..1]:
+        P=0 - минимальное число ребер для связанности (N-1)
+        P=1 - максимально насыщенный граф (N*(N-1) ребер)
     """
     if N < 1:
         return []
     
     edges = []
-    # 1. Генерация остовного дерева (сначала создаём неориентированный связный граф)
     vertices = list(range(N))
     random.shuffle(vertices)
     connected = {vertices[0]}
     remaining = set(vertices[1:])
-    
+
+    # Создать остов (неориентированный)
     while remaining:
         u = random.choice(tuple(connected))
         v = random.choice(tuple(remaining))
-        # Добавляем ребро u-v как неориентированное (без направления)
-        edges.append((u,v))  # напр. для остова ориентируем позже
+        edges.append((u, v))
         connected.add(v)
         remaining.remove(v)
-    
-    # 2. Ориентируем рёбра остова случайно
+
+    # Ориентировать ребра остова
     oriented_edges = []
-    for (u,v) in edges:
+    for (u, v) in edges:
         if random.choice([True, False]):
-            oriented_edges.append((u,v))
+            oriented_edges.append((u, v))
         else:
-            oriented_edges.append((v,u))
-    
-    # 3. Добавляем дополнительные случайные ребра с ориентацией
-    max_possible_edges = N*(N-1)
-    current_edges = len(oriented_edges)
-    extra_edges = int(extra_edges_ratio * (N-1))
-    total_edges = current_edges + extra_edges
+            oriented_edges.append((v, u))
+
+    max_edges = N * (N - 1)
+    min_edges = N - 1
+    additional_edges_count = int(P * (max_edges - min_edges))
+
     existing = set(oriented_edges)
-    
-    while len(oriented_edges) < total_edges:
-        u = random.randint(0, N-1)
-        v = random.randint(0, N-1)
-        if u != v and (u,v) not in existing:
-            oriented_edges.append((u,v))
-            existing.add((u,v))
-    
+
+    # Добавить дополнительные ребра, чтобы получить заданную плотность
+    while len(oriented_edges) < min_edges + additional_edges_count:
+        u = random.randint(0, N - 1)
+        v = random.randint(0, N - 1)
+        if u != v and (u, v) not in existing:
+            oriented_edges.append((u, v))
+            existing.add((u, v))
+
     return oriented_edges
 
 if __name__ == "__main__":
@@ -57,7 +56,7 @@ if __name__ == "__main__":
         sys.exit(1)
     
     N = int(sys.argv[1])
-    graph_edges = generate_weakly_connected_digraph(N)
+    graph_edges = generate_weakly_connected_digraph(N, 0.9)
     print("digraph G {")
     for u, v in graph_edges:
         print("    ", u, "->", v, " [label=", random.randint(1, 10), "];", sep='')

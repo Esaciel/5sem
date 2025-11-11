@@ -24,6 +24,11 @@ ready/app-tui-release : ready build_apps
 ready/app-tui-debug : ready  build_apps
 	cp code/apps/outdir/app-tui-debug ready/.
 
+apps : ready build_apps
+	cp code/apps/outdir/app-cli-release ready/.
+	cp code/apps/outdir/app-cli-debug ready/.
+	cp code/apps/outdir/app-tui-release ready/.
+	cp code/apps/outdir/app-tui-debug ready/.
 
 build_unit : meson_install
 	mv code/unit/meson.txt code/unit/meson.build  2>/dev/null || echo "" > /dev/null
@@ -36,7 +41,7 @@ test_unit : build_unit
 ready/stud-unit-test-report.json : ready test_unit
 	dpkg -l | grep -qw libxml2-utils || apt install libxml2-utils -y -qq
 	@TIMESTAMP=$$(date +"%Y-%m-%dT%H:%M:%S%:z") ; \
-	COVERAGE=$$(cd code/unit/outdir && find . -type f -name "*.gcda" -not -name ".._src_unit.cpp.gcda" -exec gcov {} \; | \
+	COVERAGE=$$(cd code/unit/outdir && find . -type f -name "*.gcda" -not \( -name ".._src_unit.cpp.gcda" -o -name ".._src_Measurements_measurements.cpp.gcda" \) -exec gcov {} \; | \
 		grep "Lines executed:" | \
 		tail -1 | \
 		sed 's/Lines executed://;s/%.*//' | tr -d ' ') ; \

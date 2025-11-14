@@ -1,0 +1,25 @@
+systeminfo.exe:
+
+OS name:                                 Microsoft Windows 11 Home for single language
+OS version:                              10.0.26100 N/D build 26100
+OS Configuration:                        Isolated work station
+
+OS Build Type:                           Multiprocessor Free
+System Model:                            ASUS Zenbook 14 UX3405MA_UX3405MA
+System Type:                             x64-based PC
+
+Processors:                              Number of processors - 1.
+[01]: Intel64 Family 6 Model 170 Stepping 4 GenuineIntel ~1400 MHz
+
+BIOS Version:                            American Megatrends International, LLC. UX3405MA.308, 23.07.2024
+
+Total Physical Memory:                   15,741 MB
+Virtual Memory: Max Size:                22,653 MB
+
+
+wmic cpu:
+
+Name                                     Intel(R) Core(TM) Ultra 7 155H
+NumberOfCores                            16
+NumberOfEnabledCore                      16
+NumberOfLogicalProcessors                22  

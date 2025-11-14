@@ -1,0 +1,34 @@
+vector<Pair>
+find_pairs_within_range__sequential(const vector<vector<uint>> &adj,
+                                    double max_distance) {
+  size_t n = adj.size();
+  double INF = numeric_limits<double>::infinity();
+  vector<vector<double>> dist(n, vector<double>(n, INF));
+  for (size_t i = 0; i < n; ++i) {
+    dist[i][i] = 0;
+    for (size_t j = 0; j < n; ++j) {
+      if (adj[i][j] == numeric_limits<uint>::infinity())
+        continue;
+      dist[i][j] = static_cast<double>(adj[i][j]);
+    }
+  }
+  for (size_t k = 0; k < n; ++k) {
+    for (size_t i = 0; i < n; ++i) {
+      for (size_t j = 0; j < n; ++j) {
+        double new_dist = dist[i][k] + dist[k][j];
+        if (new_dist < dist[i][j]) {
+          dist[i][j] = new_dist;
+        }
+      }
+    }
+  }
+
+  vector<Pair> pairs;
+  for (size_t i = 0; i < n; ++i) {
+    for (size_t j = 0; j < n; ++j) {
+      if (i != j && dist[i][j] <= max_distance)
+        pairs.emplace_back(i, j);
+    }
+  }
+  return pairs;
+}

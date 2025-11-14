@@ -1,0 +1,22 @@
+void floyd_warshall_block(vector<vector<double>> &dist, int blockSize,
+                          int blockRow, int blockCol, int kBlock) {
+  int n = dist.size();
+  int rowStart = blockRow * blockSize;
+  int colStart = blockCol * blockSize;
+  int kStart = kBlock * blockSize;
+
+  int rowEnd = min(rowStart + blockSize, n);
+  int colEnd = min(colStart + blockSize, n);
+  int kEnd = min(kStart + blockSize, n);
+
+  for (int k = kStart; k < kEnd; ++k) {
+    for (int i = rowStart; i < rowEnd; ++i) {
+      for (int j = colStart; j < colEnd; ++j) {
+        auto new_dist = dist[i][k] + dist[k][j];
+        if (new_dist < dist[i][j]) {
+          dist[i][j] = dist[i][k] + dist[k][j];
+        }
+      }
+    }
+  }
+}

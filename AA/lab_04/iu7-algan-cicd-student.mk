@@ -41,7 +41,7 @@ test_unit : build_unit
 ready/stud-unit-test-report.json : ready test_unit
 	dpkg -l | grep -qw libxml2-utils || apt install libxml2-utils -y -qq
 	@TIMESTAMP=$$(date +"%Y-%m-%dT%H:%M:%S%:z") ; \
-	COVERAGE=$$(cd code/unit/outdir && find . -type f -name "*.gcda" -not \( -name ".._src_unit.cpp.gcda" -o -name ".._src_Measurements_measurements.cpp.gcda" \) -exec gcov {} \; | \
+	COVERAGE=$$(cd code/unit/outdir && find . -type f -name "*.gcda" -not \( -name ".._src_unit.cpp.gcda" -o -name ".._src_Measurements_measurements.cpp.gcda" \) -exec gcov-12 {} \; | \
 		grep "Lines executed:" | \
 		tail -1 | \
 		sed 's/Lines executed://;s/%.*//' | tr -d ' ') ; \
